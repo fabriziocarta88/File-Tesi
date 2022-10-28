@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument('--split', type=str, default='811')
     parser.add_argument('--device', type=str, default='gpu')
     parser.add_argument('--readout', type=str, default='add')
-    parser.add_argument('--spanning_tree', type=str, default='False')
+    parser.add_argument('--spanning_tree', type=str, default='True')
     parser.add_argument('--structure', type=str, default='sc')
 
     parser.add_argument('--random_seed', type=int, default=12345)
