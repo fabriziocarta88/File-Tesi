@@ -11,7 +11,7 @@ import copy
 from torch_geometric.data import Data, DataLoader
 from torch_scatter import scatter
 
-#from utils.utils import build_spanning_tree_edge, find_higher_order_neighbors, add_self_loops
+from utils.utils import build_spanning_tree_edge, find_higher_order_neighbors, add_self_loops
 from sklearn.metrics import r2_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import classification_report
@@ -66,8 +66,8 @@ def load_data(args):
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
 
     elif args.dataset in ["ESOL", "Lipo", "BACE", "BBBP"]:
-        #from utils.moleculenet import MoleculeNet
-       # dataset = MoleculeNet(root=os.path.join(args.data_dir, 'MoleculeNet', args.dataset),name=args.dataset)
+        from utils.moleculenet import MoleculeNet
+        dataset = MoleculeNet(root=os.path.join(args.data_dir, 'MoleculeNet', args.dataset),name=args.dataset)
         dataset = dataset[torch.randperm(len(dataset))]    
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
