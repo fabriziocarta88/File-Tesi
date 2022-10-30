@@ -250,7 +250,7 @@ def main(data, args):
                 y_hat += list(out.cpu().detach().numpy().reshape(-1))
             y_true += list(y.cpu().detach().numpy().reshape(-1))
 
-        return loss_total/total_graph, y_hat, y_true
+        return loss_total/total_graph, y_hat, y_true   # FARE UN PRINT PER PLOTTARE!
             
     with open(log_file, 'a') as f:
         print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
