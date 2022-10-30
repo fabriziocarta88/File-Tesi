@@ -30,11 +30,11 @@ def get_args():
 
     parser.add_argument('--random_seed', type=int, default=12345)
     parser.add_argument('--random_seed_2', type=int, default=12345)
-    parser.add_argument('--label', type=int, default=12)
+    parser.add_argument('--label', type=int, default=12)   # output
     parser.add_argument('--batch_size', type=int, default=64)
-    parser.add_argument('--num_layers', type=int, default=3)
+    parser.add_argument('--num_layers', type=int, default=3)   # hidden layers
     parser.add_argument('--epoch', type=int, default=500)
-    parser.add_argument('--lr', type=float, default=1e-3)
+    parser.add_argument('--lr', type=float, default=1e-3)    # learning rate
     parser.add_argument('--test_per_round', type=int, default=5)
     parser.add_argument('--threshold', type=float, default=0.1)
     parser.add_argument('--cutoff', type=float, default=10.0)
