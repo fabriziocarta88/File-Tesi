@@ -119,13 +119,13 @@ def main(data, args):
         input_channels_node, hidden_channels, readout = 9, 64, args.readout
     
     if args.dataset in [ 'BACE', 'BBBP']:
-        task = 'classification'
+        task1 = 'classification'                  # cambio da task-> task1
     elif args.dataset in ['QM9', 'ESOL', 'Lipo']:
-        task = 'regression'
+        task1 = 'regression'
     elif args.dataset in ['brain']:
-        task = 'regression'
+        task1 = 'regression'
             
-    if task == 'regression':
+    if task1 == 'regression':
         output_channels = 1
     else:
         output_channels = 2
@@ -171,11 +171,11 @@ def main(data, args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.9, patience=10, min_lr=5e-5)
     
-    if task == 'regression':
+    if task2 == 'regression':               # cambio da task-> task2
         criterion = torch.nn.MSELoss()
         from sklearn.metrics import mean_absolute_error
         measure = mean_absolute_error
-    elif task == 'classification':
+    elif task2 == 'classification':
         criterion = torch.nn.CrossEntropyLoss()
         from sklearn.metrics import accuracy_score
         measure = accuracy_score
