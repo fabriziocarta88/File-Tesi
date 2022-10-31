@@ -9,8 +9,8 @@ import pandas as pd
 
 def load_brain_data(data_dir='./data', structure='sc', target='ReadEng_Unadj', threshold=1e5, random_seed=12345):
     np.random.seed(random_seed)
-    coor_PATH = os.path.join(data_dir, 'brain', 'ROI_coordinates')    # cambio Brain con brain
-    graph_PATH = os.path.join(data_dir, 'brain', 'SC_FC_dataset_0905')  # pure qui
+    coor_PATH = os.path.join(data_dir, 'Brain', 'ROI_coordinates')    # cambio Brain con brain
+    graph_PATH = os.path.join(data_dir, 'Brain', 'SC_FC_dataset_0905')  # pure qui
     df = pd.read_csv(os.path.join(graph_PATH, 'targets.csv'))
     
     with open(os.path.join(coor_PATH, 'coordinates_mean.npy'), 'rb') as f:
