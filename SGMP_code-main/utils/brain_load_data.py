@@ -37,7 +37,7 @@ def load_brain_data(data_dir='./data', structure='sc', target='ReadEng_Unadj', t
                 y0 = age_dict[y_temp]
                     
                 item = Data(
-                    x=torch.arange(68, dtype=torch.long),
+                    x=torch.arange(68, dtype=torch.long),  # 68= num. nodi
                     pos=torch.tensor(coordinates, dtype=torch.float),
                     edge_index=torch.tensor(np.concatenate(np.nonzero((struc[i]>threshold)|(struc[i]<-threshold))).reshape(2,-1), dtype=torch.long),
                     edge_attr=torch.tensor(struc[i][(struc[i]>threshold)|(struc[i]<-threshold)].reshape(-1), dtype=torch.float),
