@@ -90,7 +90,7 @@ def load_data(args):
     return train_loader, valid_loader, test_loader
 
 def main(data, args):
-    global task
+    #global task
     # logging
     if args.spanning_tree == 'True':
         LOG_DIR = os.path.join(args.save_dir, args.dataset, args.model+'_st')
