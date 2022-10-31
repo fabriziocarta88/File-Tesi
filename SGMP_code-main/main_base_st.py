@@ -45,7 +45,7 @@ def get_args():
 
 def load_data(args):
     if args.dataset == 'synthetic':
-        with open(os.path.join(args.data_dir, 'synthetic.pkl'), 'rb') as file:
+        with open(os.path.join(args.data_dir,'synthetic' ,'synthetic.pkl'), 'rb') as file:
             dataset = pkl.load(file)
         dataset = [dataset[i] for i in torch.randperm(len(dataset))]     
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
