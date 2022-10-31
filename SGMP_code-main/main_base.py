@@ -192,7 +192,7 @@ def main(data, args):
             if args.dataset == 'QM9':
                 y = data.y[:, args.label]
             else:
-                y = data.y.long() if task == 'classification' else data.y
+                y = data.y.long() if task3 == 'classification' else data.y  # cambio task-> task3
             num_nodes = data.num_nodes
             num_edges = data.num_edges
             if args.spanning_tree == 'True':
@@ -205,7 +205,7 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
                 
-            if task == 'classification':
+            if task3 == 'classification':                                 # pure qui
                 loss = criterion(out, y.reshape(-1))  # Compute the loss.
             else:
                 loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
@@ -224,7 +224,7 @@ def main(data, args):
             if args.dataset == 'QM9':
                 y = data.y[:, args.label]
             else:
-                y = data.y.long() if task == 'classification' else data.y
+                y = data.y.long() if task4 == 'classification' else data.y  # cambio task-> task4
             num_nodes = data.num_nodes
             num_edges = data.num_edges
             if args.spanning_tree == 'True':
@@ -237,13 +237,13 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
                 
-            if task == 'classification':
+            if task4 == 'classification':                                 # pure qui
                 loss = criterion(out, y.reshape(-1))  # Compute the loss.
             else:
                 loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
             loss_total += loss.detach().cpu() * data.num_graphs
             total_graph += data.num_graphs
-            if task == 'classification':
+            if task4 == 'classification':                                # pure qui
                 pred = out.argmax(dim=1)  # Use the class with highest probability.
                 y_hat += list(pred.cpu().detach().numpy().reshape(-1))
             else:
@@ -256,7 +256,7 @@ def main(data, args):
         print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
 
     start_time = time.time()
-    best_valid_score = 1e10 if task == 'regression' else 0
+    best_valid_score = 1e10 if task5 == 'regression' else 0        # cambio task-> task5
     best_model = None
     for epoch in (range(1, args.epoch)):
         # training
@@ -273,7 +273,7 @@ def main(data, args):
             with open(log_file, 'a') as f:
                 print(f"{epoch:03d}, {valid_loss:.4f}, {valid_score:.4f} ,{(time.time() - start_time):.4f}", file=f) 
 
-            if task == 'regression':
+            if task5 == 'regression':                           # pure qui
                 if valid_score < best_valid_score:
                     best_valid_score = valid_score
                     best_model = copy.deepcopy(model)
@@ -289,9 +289,9 @@ def main(data, args):
     test_loss, yhat_test, ytrue_test = test(test_loader, model, args)
     test_score = measure(ytrue_test, yhat_test)
     with open(result_file, 'a') as f:
-        if task == 'regression':
+        if task6 == 'regression':             # cambio task-> task6
             print(f"Final, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f) 
-        elif task == 'classification':
+        elif task6 == 'classification':       # pure qui
             print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f) 
         
     
@@ -302,10 +302,10 @@ def main(data, args):
     test_loss, yhat_test, ytrue_test = test(test_loader, best_model, args)
     test_score = measure(ytrue_test, yhat_test) 
     with open(result_file, 'a') as f:
-        if task == 'regression':
+        if task7 == 'regression':     # cambio task-> task7
             print(f"Best Model, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}") 
             print(f"Best Model, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f) 
-        elif task == 'classification':
+        elif task7 == 'classification':  # pure qui
             print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}") 
             print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f) 
             
