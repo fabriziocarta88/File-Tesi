@@ -67,7 +67,7 @@ class SGMP(torch.nn.Module):
         torch.nn.init.xavier_uniform_(self.lin2.weight)
         self.lin2.bias.data.fill_(0)
         
-    def forward(self, x, pos, batch, edge_index_3rd=None):
+    def forward(self, x, pos, batch, edge_index_3rd=None):   # qui verifico l'accuracy al variare della rototraslazione
         x = self.embedding(x)
         
         distances = {}
@@ -77,7 +77,7 @@ class SGMP(torch.nn.Module):
         i_to_j_dis = (pos[j] - pos[i]).norm(p=2, dim=1)
         k_to_j_dis = (pos[k] - pos[j]).norm(p=2, dim=1)
         p_to_j_dis = (pos[p] - pos[j]).norm(p=2, dim=1)
-        distances[1] = i_to_j_dis
+        distances[1] = i_to_j_dis                        
         distances[2] = k_to_j_dis
         distances[3] = p_to_j_dis
         theta_ijk = get_angle(pos[j] - pos[i], pos[k] - pos[j])
