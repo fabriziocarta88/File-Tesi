@@ -117,17 +117,17 @@ def main(data, args):
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
     else:
-        input_channels_node, hidden_channels, readout = 9, 64, args.readout
+        input_channels_node, hidden_channels, readout = 1, 64, args.readout   # default=9, per synth porre 1
     
     if args.dataset in [ 'BACE', 'BBBP']:
         task = 'classification'                  # cambio da task-> task1
     elif args.dataset in ['QM9', 'ESOL', 'Lipo']:
         task = 'regression'
-    elif args.dataset in ['brain']:
+    elif args.dataset in ['brain','synthetic']:
         task = 'regression'
             
     if task == 'regression':
-        output_channels = 1
+        output_channels = 4   # default 1
     else:
         output_channels = 2
         
