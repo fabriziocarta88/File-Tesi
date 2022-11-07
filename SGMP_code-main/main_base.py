@@ -112,22 +112,25 @@ def main(data, args):
     else:
         raise Exception('Please assign the type of device: cpu or gpu.')
     
-    if args.dataset == 'brain':
+    if args.dataset == 'synthetic':
         input_channels_node, hidden_channels, readout = 1, 64, args.readout
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
     else:
-        input_channels_node, hidden_channels, readout = 1, 64, args.readout   # default=9, per synth porre 1
+        input_channels_node, hidden_channels, readout = 9, 64, args.readout   
     
     if args.dataset in [ 'BACE', 'BBBP']:
-        task = 'classification'                  # cambio da task-> task1
+        task = 'classification'                  
     elif args.dataset in ['QM9', 'ESOL', 'Lipo']:
         task = 'regression'
     elif args.dataset in ['brain','synthetic']:
         task = 'regression'
             
     if task == 'regression':
-        output_channels = 4   # default 1
+      if args.dataset == 'synthetic':                     # cambiato il codice-> aggiunto 4 ciclo annodato if/elif
+          output_channels = 4
+      elif args.dataset in ['QM9', 'ESOL', 'Lipo','brain']:
+          output_channels = 1   # default 1
     else:
         output_channels = 2
         
@@ -172,7 +175,7 @@ def main(data, args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.9, patience=10, min_lr=5e-5)
     
-    if task == 'regression':               # cambio da task-> task2
+    if task == 'regression':               
         criterion = torch.nn.MSELoss()
         from sklearn.metrics import mean_absolute_error
         measure = mean_absolute_error
@@ -193,7 +196,7 @@ def main(data, args):
             if args.dataset == 'QM9':
                 y = data.y[:, args.label]
             else:
-                y = data.y.long() if task == 'classification' else data.y  # cambio task-> task3
+                y = data.y.long() if task == 'classification' else data.y  
             num_nodes = data.num_nodes
             num_edges = data.num_edges
             if args.spanning_tree == 'True':
@@ -206,7 +209,7 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
                 
-            if task == 'classification':                                 # pure qui
+            if task == 'classification':                                
                 loss = criterion(out, y.reshape(-1))  # Compute the loss.
             else:
                 loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
@@ -225,7 +228,7 @@ def main(data, args):
             if args.dataset == 'QM9':
                 y = data.y[:, args.label]
             else:
-                y = data.y.long() if task == 'classification' else data.y  # cambio task-> task4
+                y = data.y.long() if task == 'classification' else data.y  
             num_nodes = data.num_nodes
             num_edges = data.num_edges
             if args.spanning_tree == 'True':
@@ -238,13 +241,13 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
                 
-            if task == 'classification':                                 # pure qui
+            if task == 'classification':                                
                 loss = criterion(out, y.reshape(-1))  # Compute the loss.
             else:
                 loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
             loss_total += loss.detach().cpu() * data.num_graphs
             total_graph += data.num_graphs
-            if task == 'classification':                                # pure qui
+            if task == 'classification':                                
                 pred = out.argmax(dim=1)  # Use the class with highest probability.
                 y_hat += list(pred.cpu().detach().numpy().reshape(-1))
             else:
@@ -257,7 +260,7 @@ def main(data, args):
         print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
 
     start_time = time.time()
-    best_valid_score = 1e10 if task == 'regression' else 0        # cambio task-> task5
+    best_valid_score = 1e10 if task == 'regression' else 0        
     best_model = None
     for epoch in (range(1, args.epoch)):
         # training
@@ -274,7 +277,7 @@ def main(data, args):
             with open(log_file, 'a') as f:
                 print(f"{epoch:03d}, {valid_loss:.4f}, {valid_score:.4f} ,{(time.time() - start_time):.4f}", file=f) 
 
-            if task == 'regression':                           # pure qui
+            if task == 'regression':                           
                 if valid_score < best_valid_score:
                     best_valid_score = valid_score
                     best_model = copy.deepcopy(model)
