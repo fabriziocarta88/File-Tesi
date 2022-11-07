@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from torch_geometric.data import Data, DataLoader
 import torch
 import pandas as pd
-
-def load_brain_data(data_dir='./data', structure='sc', target='ReadEng_Unadj', threshold=1e5, random_seed=12345):
+# cambio cartella-> vado in C\users..
+def load_brain_data(data_dir=r'C:\Users\Fabrizio\Desktop\Fabrizio\Tesi\Codici\SGMP_code-main\data\Brain', structure='sc', target='ReadEng_Unadj', threshold=1e5, random_seed=12345):
     np.random.seed(random_seed)
     coor_PATH = os.path.join(data_dir, 'Brain', 'ROI_coordinates')    
     graph_PATH = os.path.join(data_dir, 'Brain', 'SC_FC_dataset_0905')  
