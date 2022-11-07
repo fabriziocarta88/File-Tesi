@@ -47,7 +47,7 @@ def load_data(args):
     if args.dataset == 'synthetic':
         with open(os.path.join(args.data_dir, 'synthetic', 'synthetic.pkl'), 'rb') as file:
             dataset = pkl.load(file)
-        dataset = [dataset[i] for i in torch.randperm(len(dataset))]    
+        dataset = [dataset[i] for i in torch.randperm(len(dataset))]      # sostituito intera riga per incompatibilità nel leggere stringa
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
 
