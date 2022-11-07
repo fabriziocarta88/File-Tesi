@@ -112,7 +112,7 @@ def main(data, args):
     else:
         raise Exception('Please assign the type of device: cpu or gpu.')
     
-    if args.dataset == 'synthetic':
+    if args.dataset == 'synthetic' and 'brain':    # aggiungo and
         input_channels_node, hidden_channels, readout = 1, 64, args.readout
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
@@ -123,13 +123,13 @@ def main(data, args):
         task = 'classification'                  
     elif args.dataset in ['QM9', 'ESOL', 'Lipo']:
         task = 'regression'
-    elif args.dataset in ['brain','synthetic']:
+    elif args.dataset in ['brain', 'synthetic']:
         task = 'regression'
             
     if task == 'regression':
       if args.dataset == 'synthetic':                     # cambiato il codice-> aggiunto 4 ciclo annodato if/elif
           output_channels = 4
-      elif args.dataset in ['QM9', 'ESOL', 'Lipo','brain']:
+      elif args.dataset in ['QM9', 'ESOL', 'Lipo', 'brain']:
           output_channels = 1   # default 1
     else:
         output_channels = 2
