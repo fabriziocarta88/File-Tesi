@@ -26,7 +26,7 @@ def get_args():
     parser.add_argument('--device', type=str, default='gpu')
     parser.add_argument('--readout', type=str, default='add')  # fix reservoir for gradient descetent or linerar reg-> add, sum, mean
     parser.add_argument('--spanning_tree', type=str, default='False')
-    parser.add_argument('--structure', type=str, default='sc')  # structural connectivity
+    parser.add_argument('--structure', type=str, default='sc')  # structural connectivity or fc
 
     parser.add_argument('--random_seed', type=int, default=12345)
     parser.add_argument('--random_seed_2', type=int, default=12345)
