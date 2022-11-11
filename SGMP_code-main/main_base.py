@@ -47,14 +47,15 @@ def load_data(args):
     if args.dataset == 'synthetic':
         with open(os.path.join(args.data_dir, 'synthetic', 'synthetic.pkl'), 'rb') as file:
             dataset = pkl.load(file)
-        dataset = [dataset[i] for i in torch.randperm(len(dataset))]      # sostituito intera riga per incompatibilità nel leggere stringa
+        dataset = [dataset[i] for i in torch.randperm(len(dataset))]  # sostituito intera riga per incompatibilità nel leggere stringa
+        random_state = np.random.RandomState(seed=0)     # aggiunto
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
 
     elif args.dataset == 'QM9':
         from torch_geometric.datasets import QM9
         dataset = QM9(root=os.path.join(args.data_dir, 'QM9'))
-        random_state = np.random.RandomState(seed=42)
+        random_state = np.random.RandomState(seed=0)
         perm = torch.from_numpy(random_state.permutation(np.arange(130831)))
         dataset = dataset[perm]
         train_valid_split, valid_test_split = 110000, 10000
@@ -68,7 +69,8 @@ def load_data(args):
     elif args.dataset in ["ESOL", "Lipo", "BACE", "BBBP"]:
         from utils.moleculenet import MoleculeNet
         dataset = MoleculeNet(root=os.path.join(args.data_dir, 'MoleculeNet', args.dataset),name=args.dataset)
-        dataset = dataset[torch.randperm(len(dataset))]    
+        dataset = dataset[torch.randperm(len(dataset))]
+        random_state = np.random.RandomState(seed=0)   # aggiunto
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
     else:
