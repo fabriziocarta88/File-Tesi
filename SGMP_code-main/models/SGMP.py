@@ -11,7 +11,7 @@ def get_angle(v1: Tensor, v2: Tensor) -> Tensor:
     return torch.atan2(
         torch.cross(v1, v2, dim=1).norm(p=2, dim=1), (v1 * v2).sum(dim=1))
 
-class GaussianSmearing(torch.nn.Module):
+class GaussianSmearing(torch.nn.Module):                           # Smearing= Sbavatura
     def __init__(self, start=0.0, stop=5.0, num_gaussians=50):
         super(GaussianSmearing, self).__init__()
         offset = torch.linspace(start, stop, num_gaussians)
