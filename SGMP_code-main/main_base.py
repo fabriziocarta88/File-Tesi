@@ -28,7 +28,7 @@ def get_args():
     parser.add_argument('--spanning_tree', type=str, default='False')
     parser.add_argument('--structure', type=str, default='sc')  # structural connectivity or fc
 
-    parser.add_argument('--random_seed', type=int, default=0)   # standard =0
+    parser.add_argument('--random_seed', type=int, default=0)   # standard =1234
     parser.add_argument('--random_seed_2', type=int, default=0) # same
     parser.add_argument('--label', type=int, default=12)   # output: 12 per QM9 ( lo 0 è lo score, gli altri i paramentri), 5 per synthetic
     parser.add_argument('--batch_size', type=int, default=64)
