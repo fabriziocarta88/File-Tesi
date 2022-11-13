@@ -150,7 +150,7 @@ class SPNN(torch.nn.Module):
         self.combine = Sequential(
                 Linear(hidden_channels*7, hidden_channels*4),
                 torch.nn.ReLU(),
-                Linear(hidden_channels*4, hidden_channels*2),
+                Linear(hidden_channels*4, hidden_channels*2),         
                 torch.nn.ReLU(),
                 Linear(hidden_channels*2, hidden_channels),
             )
