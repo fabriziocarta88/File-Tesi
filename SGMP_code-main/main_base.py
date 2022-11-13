@@ -35,7 +35,7 @@ def get_args():
     parser.add_argument('--num_layers', type=int, default=3)   # hidden layers
     parser.add_argument('--epoch', type=int, default=500)
     parser.add_argument('--lr', type=float, default=1e-3)    # learning rate
-    parser.add_argument('--test_per_round', type=int, default=5)
+    parser.add_argument('--test_per_round', type=int, default=5)   # quanti split random del dataset fa per ridurre al varianza
     parser.add_argument('--threshold', type=float, default=0.1)
     parser.add_argument('--cutoff', type=float, default=10.0)
     parser.add_argument('--weight_decay', type=float, default=5e-4)
