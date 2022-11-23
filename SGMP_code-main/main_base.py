@@ -12,7 +12,7 @@ from torch_geometric.data import Data, DataLoader
 from torch_scatter import scatter
 
 from utils.utils import build_spanning_tree_edge, find_higher_order_neighbors, add_self_loops
-from utils.ROC import *
+from utils.ROC import *      # nuova serie di funzioni per visualization
 from sklearn.metrics import r2_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import classification_report
