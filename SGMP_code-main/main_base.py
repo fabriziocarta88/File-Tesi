@@ -34,7 +34,7 @@ def get_args():
     parser.add_argument('--random_seed_2', type=int, default=0) # same
     parser.add_argument('--label', type=int, default=12)   # output: 12 per QM9 ( lo 0 è lo score, gli altri i paramentri), 5 per synthetic
     parser.add_argument('--batch_size', type=int, default=64)
-    parser.add_argument('--num_layers', type=int, default=3)   # numero di volte in cui blocco SPNN viene fatto girare/ per epoca
+    parser.add_argument('--num_layers', type=int, default=3)   # numero di volte in cui blocco del codice viene fatto girare/ per epoca
     parser.add_argument('--epoch', type=int, default=500)
     parser.add_argument('--lr', type=float, default=1e-3)    # learning rate
     parser.add_argument('--test_per_round', type=int, default=5)   # quanti split random del dataset fa per ridurre al varianza
