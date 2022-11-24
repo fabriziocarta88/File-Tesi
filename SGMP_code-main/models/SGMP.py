@@ -62,7 +62,7 @@ class SGMP(torch.nn.Module):
         for block in self.interactions:
             block.reset_parameters()
             
-        torch.nn.init.xavier_uniform_(self.lin1.weight)
+        torch.nn.init.xavier_uniform_(self.lin1.weight)   # Fills the input Tensor with values according to the method described in Understanding the difficulty of training deep feedforward neural networks - Glorot, X. & Bengio, Y. (2010), using a uniform distribution
         self.lin1.bias.data.fill_(0)
         torch.nn.init.xavier_uniform_(self.lin2.weight)
         self.lin2.bias.data.fill_(0)
