@@ -210,7 +210,7 @@ def main(data, args):
                 edge_index, _ = add_self_loops(edge_index, num_nodes=num_nodes) # add self loop to avoid crash on specific data point with longest path < 3
                 _, _, edge_index_3rd, _, _, _, _, _ = find_higher_order_neighbors(edge_index, num_nodes, order=3)
                 out = model(x, pos, batch, edge_index_3rd)
-            else:                                             # provare ad invertire gli argomenti
+            else:                                             
                 out = model(x, pos, edge_index, batch)
                 
             if task == 'classification':                                
