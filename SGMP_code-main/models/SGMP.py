@@ -157,32 +157,32 @@ class SPNN(torch.nn.Module):     # represents a sparse position-aware neural net
         
         self.reset_parameters()
         
-    def reset_parameters(self):
-        for i in range(3):
-            torch.nn.init.xavier_uniform_(self.mlps_dist[i][0].weight)
+    def reset_parameters(self):  # This method initializes the parameters of the model
+        for i in range(3):       
+            torch.nn.init.xavier_uniform_(self.mlps_dist[i][0].weight)  # The method sets the weights of each layer of the distance MLPs and the combination MLPs with values from a uniform distribution using the Xavier initialization method. The biases are set to zero
             self.mlps_dist[i][0].bias.data.fill_(0)
-        torch.nn.init.xavier_uniform_(self.combine[0].weight)
+        torch.nn.init.xavier_uniform_(self.combine[0].weight)  # initializes the weights with values sampled from a uniform distribution that has a specific range determined by the size of the input and output dimensions of the layer
         self.combine[0].bias.data.fill_(0)
-        torch.nn.init.xavier_uniform_(self.combine[2].weight)
+        torch.nn.init.xavier_uniform_(self.combine[2].weight)  # It is designed to help with the issue of vanishing gradients that can occur in deep neural networks, by ensuring that the variance of the activations is maintained across layers
         self.combine[2].bias.data.fill_(0)
         torch.nn.init.xavier_uniform_(self.combine[4].weight)
         self.combine[4].bias.data.fill_(0)
             
     def forward(self,
-            x, 
+            x,          # The method takes as input the node features x, the distances, thetas, and phis as well as the 3rd-order edge index edge_index_3rd
             distances,
             thetas,
             phis,
             edge_index_3rd=None,
            ):
-        i, j, k, p = edge_index_3rd
+        i, j, k, p = edge_index_3rd   # The edge index is a tuple containing four tensors representing the source node indices (i), destination node indices (j), indices of second-order neighbors (k), and indices of third-order neighbors (p)
 
         node_attr_0st = x[i]
         node_attr_1st = x[j]
         node_attr_2nd = x[k]
-        node_attr_3rd = x[p]
-        geo_encoding_1st = self.mlps_dist[0](
-            self.distance_expansion(distances[1])
+        node_attr_3rd = x[p]                    # The method starts by extracting the node attributes for each order of neighbors and the geometric encodings for each of the three orders
+        geo_encoding_1st = self.mlps_dist[0](                 
+            self.distance_expansion(distances[1])    # computes geometric encodings for each order of interactions using the distances, thetas, and phis information
          )
         geo_encoding_2nd = self.mlps_dist[1](
             torch.cat([self.distance_expansion(distances[2]), self.theta_expansion(thetas[1])], dim=-1)
@@ -191,7 +191,7 @@ class SPNN(torch.nn.Module):     # represents a sparse position-aware neural net
             torch.cat([self.distance_expansion(distances[3]), self.theta_expansion(thetas[2]), self.phi_expansion(phis[1])], dim=-1)
          )
 
-        concatenated_vector = torch.cat(
+        concatenated_vector = torch.cat(     # concatenates all the node attributes and geometric encodings into a single vector
             [
                 node_attr_0st,
                 node_attr_1st,
