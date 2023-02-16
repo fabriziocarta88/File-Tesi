@@ -11,8 +11,8 @@ def get_angle(v1: Tensor, v2: Tensor) -> Tensor:  #  this function is a vectoriz
     return torch.atan2(
         torch.cross(v1, v2, dim=1).norm(p=2, dim=1), (v1 * v2).sum(dim=1))
 
-class GaussianSmearing(torch.nn.Module):                           
-    def __init__(self, start=0.0, stop=5.0, num_gaussians=50):
+class GaussianSmearing(torch.nn.Module):                         # this module applies a Gaussian function centered at each atomic position to generate a continuous density representation of the system                   
+    def __init__(self, start=0.0, stop=5.0, num_gaussians=50):   # This density representation can be used as input to various computational chemistry applications that require a continuous density representation of atomic positions
         super(GaussianSmearing, self).__init__()                   
         offset = torch.linspace(start, stop, num_gaussians)
         self.coeff = -0.5 / (offset[1] - offset[0]).item()**2
@@ -26,7 +26,7 @@ class GaussianSmearing(torch.nn.Module):
 class SGMP(torch.nn.Module):
 
     def __init__(self, input_channels_node=None, hidden_channels=128, 
-                 output_channels=1, num_interactions=3,
+                 output_channels=1, num_interactions=3,                 # num_gaussians is a tuple specifying the number of Gaussian functions to use for the distance, angle, and dihedral angle terms, and cutoff is the distance cutoff for computing interactions between nodes.
                  num_gaussians=(50,6,12), cutoff=10.0,
                  readout='add'):
         super(SGMP, self).__init__()
@@ -42,20 +42,20 @@ class SGMP(torch.nn.Module):
         self.distance_expansion = GaussianSmearing(0.0, cutoff, num_gaussians[0])
         self.theta_expansion = GaussianSmearing(0.0, PI, num_gaussians[1])
         self.phi_expansion = GaussianSmearing(0.0, 2*PI, num_gaussians[2])
-        self.embedding = Sequential(
+        self.embedding = Sequential(                                                   # This is used to embed the input features for each node in the molecular graph into a higher-dimensional space
             Linear(input_channels_node, hidden_channels),
             torch.nn.ReLU(),
             Linear(hidden_channels, hidden_channels)
         )
         
-        self.interactions = ModuleList()
-        for _ in range(num_interactions):
+        self.interactions = ModuleList()   # the SGMP module implements a message-passing neural network for molecular property prediction, with multiple message passing iterations and an additional readout layer to aggregate the node features
+        for _ in range(num_interactions):  
             block = SPNN(hidden_channels, num_gaussians, self.distance_expansion, self.theta_expansion, self.phi_expansion, input_channels=hidden_channels)
             self.interactions.append(block)
 
-        self.lin1 = Linear(hidden_channels, hidden_channels // 2)
+        self.lin1 = Linear(hidden_channels, hidden_channels // 2)  # The lin1 variable is a linear layer that maps the final node features to a hidden representation with hidden_channels // 2 output channels. The act variable is a ReLU activation function
         self.act = torch.nn.ReLU()
-        self.lin2 = Linear(hidden_channels // 2, output_channels)
+        self.lin2 = Linear(hidden_channels // 2, output_channels)  # The lin2 variable is another linear layer that maps the hidden representation to the final output with output_channels output channels
         self.reset_parameters()
         
     def reset_parameters(self):
