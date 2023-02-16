@@ -7,13 +7,13 @@ from torch_scatter import scatter
 import numpy
 import scipy
 
-def get_angle(v1: Tensor, v2: Tensor) -> Tensor:
+def get_angle(v1: Tensor, v2: Tensor) -> Tensor:  #  this function is a vectorized implementation of the formula for calculating the angle between two vectors in 3D space
     return torch.atan2(
         torch.cross(v1, v2, dim=1).norm(p=2, dim=1), (v1 * v2).sum(dim=1))
 
-class GaussianSmearing(torch.nn.Module):                           # Smearing= Sbavatura
+class GaussianSmearing(torch.nn.Module):                           
     def __init__(self, start=0.0, stop=5.0, num_gaussians=50):
-        super(GaussianSmearing, self).__init__()                   # uso super per richiamare la classe più facilmente (avrò infatti 3 gaussiane, una per ogni parametro spaziale)
+        super(GaussianSmearing, self).__init__()                   
         offset = torch.linspace(start, stop, num_gaussians)
         self.coeff = -0.5 / (offset[1] - offset[0]).item()**2
         self.register_buffer('offset', offset)
