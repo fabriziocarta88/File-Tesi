@@ -58,16 +58,16 @@ class SGMP(torch.nn.Module):
         self.lin2 = Linear(hidden_channels // 2, output_channels)  # The lin2 variable is another linear layer that maps the hidden representation to the final output with output_channels output channels
         self.reset_parameters()
         
-    def reset_parameters(self):
+    def reset_parameters(self):  # This method sets the values of the parameters to random values drawn from a uniform distribution with a specific range, which helps the network converge more quickly during training
         for block in self.interactions:
             block.reset_parameters()
             
         torch.nn.init.xavier_uniform_(self.lin1.weight)   # Fills the input Tensor with values according to the method described in Understanding the difficulty of training deep feedforward neural networks - Glorot, X. & Bengio, Y. (2010), using a uniform distribution
-        self.lin1.bias.data.fill_(0)
+        self.lin1.bias.data.fill_(0)                      # the method initializes the weight parameters of lin1 and lin2 using the torch.nn.init.xavier_uniform_ method
         torch.nn.init.xavier_uniform_(self.lin2.weight)
-        self.lin2.bias.data.fill_(0)
+        self.lin2.bias.data.fill_(0)                      # he method sets the bias values of lin1 and lin2 to zero using the fill_ method of the Tensor class. This ensures that the initial output of the layers is zero, which helps the network converge more quickly during training
         
-    def forward(self, x, pos, batch, edge_index_3rd=None):   # qui verifico l'accuracy al variare della rototraslazione
+    def forward(self, x, pos, batch, edge_index_3rd=None):  
         x = self.embedding(x)
         
         distances = {}
@@ -103,10 +103,10 @@ class SGMP(torch.nn.Module):
             
         
         if batch is None:
-            batch = torch.zeros(len(x), dtype=torch.long, device=x.device)
+            batch = torch.zeros(len(x), dtype=torch.long, device=x.device) # Note that if batch is None, it will create a batch tensor of all zeros with the same length as the number of nodes
             
-        x = scatter(x, batch, dim=0, reduce=self.readout)  
-        x = self.lin1(x)
+        x = scatter(x, batch, dim=0, reduce=self.readout)  # Apply a global pooling operation to x using the scatter function 
+        x = self.lin1(x)                                   # Apply two fully connected layers to the resulting tensor, followed by a ReLU activation function after the first layer
         x = self.act(x)
         x = self.lin2(x)
         
