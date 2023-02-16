@@ -118,7 +118,7 @@ class SGMP(torch.nn.Module):
                 f'num_layers={self.num_interactions})')
     
 
-class SPNN(torch.nn.Module):
+class SPNN(torch.nn.Module):     # represents a sparse position-aware neural network module
     def __init__(self, hidden_channels, num_gaussians, distance_expansion, theta_expansion, phi_expansion, input_channels=None, readout='add'):
         super(SPNN, self).__init__()
         
@@ -127,8 +127,8 @@ class SPNN(torch.nn.Module):
         self.theta_expansion = theta_expansion
         self.phi_expansion = phi_expansion
         
-        self.mlps_dist = ModuleList()
-        mlp_1st = Sequential(
+        self.mlps_dist = ModuleList()                    
+        mlp_1st = Sequential(                                   # instances that represent the MLPs (multi-layer perceptrons) used for the distance feature expansion
                 Linear(num_gaussians[0], hidden_channels),
                 torch.nn.ReLU(),
                 Linear(hidden_channels, hidden_channels),
@@ -147,8 +147,8 @@ class SPNN(torch.nn.Module):
         self.mlps_dist.append(mlp_2nd)
         self.mlps_dist.append(mlp_3rd)
             
-        self.combine = Sequential(
-                Linear(hidden_channels*7, hidden_channels*4),
+        self.combine = Sequential(                                     #  module that is used to combine the information from the different interactions
+                Linear(hidden_channels*7, hidden_channels*4),   # the input size of the first layer is hidden_channels*7, which corresponds to the concatenation of the outputs from the three interaction modules
                 torch.nn.ReLU(),
                 Linear(hidden_channels*4, hidden_channels*2),         
                 torch.nn.ReLU(),
