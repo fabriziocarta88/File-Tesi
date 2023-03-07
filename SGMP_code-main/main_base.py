@@ -47,7 +47,7 @@ def get_args():
 
 def load_data(args):
     if args.dataset == 'synthetic':
-        with open(os.path.join(args.data_dir, 'synthetic', 'synthetic.pkl'), 'rb') as file:
+        with open(os.path.join(args.data_dir, 'synthetic', 'synthetic.pkl'), 'rb') as file:  # 'rb' è lettura binaria
             dataset = pkl.load(file)
         dataset = [dataset[i] for i in torch.randperm(len(dataset))]  # sostituito intera riga per incompatibilità nel leggere stringa
         random_state = np.random.RandomState(seed=0)     # aggiunto
