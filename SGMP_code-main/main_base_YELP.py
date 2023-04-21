@@ -196,10 +196,15 @@ def main(data, args):
         from sklearn.metrics import mean_absolute_error
         measure = mean_absolute_error
     elif task == 'classification':
-        criterion = torch.nn.CrossEntropyLoss()
-        from sklearn.metrics import accuracy_score
-        measure = accuracy_score
-        
+        if args.dataset == 'YELP_G':
+            criterion = torch.nn.BCEWithLogitsLoss()
+            from sklearn.metrics import roc_auc_score
+            measure = roc_auc_score
+        else:
+            criterion = torch.nn.CrossEntropyLoss()
+            from sklearn.metrics import accuracy_score
+            measure = accuracy_score
+       
     # get train/valid/test data
     train_loader, valid_loader, test_loader = data        
         
