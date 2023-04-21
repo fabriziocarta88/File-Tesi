@@ -54,7 +54,7 @@ def load_data(args):
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
     
-    elif args.dataset =='YELP_G'
+    elif args.dataset =='YELP_G' :
           with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP_G.pkl.gz'), 'rb') as file:  
           dataset = pkl.load(file)
             
