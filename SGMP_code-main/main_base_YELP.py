@@ -348,30 +348,30 @@ def main(data, args):
     test_score = measure(ytrue_test, yhat_test)
     
     with open(result_file, 'a') as f:
-    if task == 'regression':
-        print(f"Final, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
-    elif task == 'classification':
-        if args.model == 'YELP_G':
-            print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
-        else:
-            print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f)
+        if task == 'regression':
+            print(f"Final, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
+        elif task == 'classification':
+            if args.model == 'YELP_G':
+                print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
+            else:
+                print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f)
 
-    train_loss, yhat_train, ytrue_train = test(train_loader, best_model, args)
-    train_score = measure(ytrue_train, yhat_train)
-    valid_loss, yhat_valid, ytrue_valid = test(valid_loader, best_model, args)
-    valid_score = measure(ytrue_valid, yhat_valid)
-    test_loss, yhat_test, ytrue_test = test(test_loader, best_model, args)
-    test_score = measure(ytrue_test, yhat_test)
-    if args.model == 'YELP_G':
-        binary_loss, binary_acc = binary_cross_entropy_loss(yhat_test, ytrue_test)
-        with open(result_file, 'a') as f:
-            print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
-    else:
-        with open(result_file, 'a') as f:
-            if task == 'regression':
-                print(f"Best Model, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
-            elif task == 'classification':
-                print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f)
+        train_loss, yhat_train, ytrue_train = test(train_loader, best_model, args)
+        train_score = measure(ytrue_train, yhat_train)
+        valid_loss, yhat_valid, ytrue_valid = test(valid_loader, best_model, args)
+        valid_score = measure(ytrue_valid, yhat_valid)
+        test_loss, yhat_test, ytrue_test = test(test_loader, best_model, args)
+        test_score = measure(ytrue_test, yhat_test)
+        if args.model == 'YELP_G':
+            binary_loss, binary_acc = binary_cross_entropy_loss(yhat_test, ytrue_test)
+            with open(result_file, 'a') as f:
+                print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
+        else:
+            with open(result_file, 'a') as f:
+                if task == 'regression':
+                    print(f"Best Model, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
+                elif task == 'classification':
+                    print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f)
 
     
 if __name__ == '__main__':
