@@ -90,6 +90,8 @@ def load_data(args):
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
     valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
+    for batch in train_loader:    # per vedere la "forma" dell'input data
+        print(batch)
 
     return train_loader, valid_loader, test_loader
 
