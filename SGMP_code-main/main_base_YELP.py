@@ -135,7 +135,7 @@ def main(data, args):
     
         
     
-    if args.dataset in [ 'BACE', 'BBBP']:
+    if args.dataset in [ 'BACE', 'BBBP','YELP_G']:
         task = 'classification'                  
     elif args.dataset in ['QM9', 'ESOL', 'Lipo']:
         task = 'regression'
