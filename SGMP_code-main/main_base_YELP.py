@@ -5,7 +5,7 @@ from tqdm import tqdm
 import time
 import pickle as pkl
 import json
-
+import gzip
 import torch
 import copy
 from torch_geometric.data import Data, DataLoader
@@ -53,6 +53,13 @@ def load_data(args):
         random_state = np.random.RandomState(seed=0)     # aggiunto
         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
+    elif args.dataset =='YELP'
+          with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP.pkl.gz'), 'rb') as file:  
+            dataset = pkl.load(file)
+            
+            random_state = np.random.RandomState(seed=0)     # aggiunto
+            train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
+            valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
 
     elif args.dataset == 'QM9':
         from torch_geometric.datasets import QM9
