@@ -233,7 +233,7 @@ def main(data, args):
             if task == 'classification':
                 if args.dataset == 'YELP_G':
                     loss = criterion(out, y.float())  # Compute the loss.
-                    y_pred = torch.sigmoid(out)
+                    y_pred = torch.relu(out)
                     y_true = y.float()
                     score = roc_auc_score(y_true.detach().cpu().numpy(), y_pred.detach().cpu().numpy())
                 else:
@@ -243,6 +243,8 @@ def main(data, args):
             loss.backward()  # Derive gradients.
             optimizer.step()  # Update parameters based on gradients.
             optimizer.zero_grad()  # Clear gradients.
+    
+    
 
     def test(loader, model, args):
         model.eval()
@@ -267,21 +269,39 @@ def main(data, args):
                 out = model(x, pos, batch, edge_index_3rd)
             else:
                 out = model(x, pos, edge_index, batch)
-                
-            if task == 'classification':                                
-                loss = criterion(out, y.reshape(-1))  # Compute the loss.
+
+            if args.dataset == 'YELP_G':
+                criterion = torch.nn.BCEWithLogitsLoss()
+                loss = criterion(out.squeeze(), y.float())
             else:
-                loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
+                if task == 'classification':                                
+                    criterion = torch.nn.CrossEntropyLoss()
+                    loss = criterion(out, y.reshape(-1))  # Compute the loss.
+                else:
+                    criterion = torch.nn.MSELoss()
+                    loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
+
             loss_total += loss.detach().cpu() * data.num_graphs
             total_graph += data.num_graphs
+
             if task == 'classification':                                
                 pred = out.argmax(dim=1)  # Use the class with highest probability.
                 y_hat += list(pred.cpu().detach().numpy().reshape(-1))
+                y_true += list(y.cpu().detach().numpy().reshape(-1))
             else:
                 y_hat += list(out.cpu().detach().numpy().reshape(-1))
-            y_true += list(y.cpu().detach().numpy().reshape(-1))
+                y_true += list(y.cpu().detach().numpy().reshape(-1))
 
-        return loss_total/total_graph, y_hat, y_true   # FARE UN PRINT PER PLOTTARE!
+        if args.dataset == 'YELP_G':
+            y_hat = torch.relu(torch.tensor(y_hat)).numpy() # applico la relu ai logits
+            auc_score = roc_auc_score(y_true, y_hat)
+            acc_score = None
+        else:
+            acc_score = accuracy_score(y_true, y_hat)
+            auc_score = None
+
+        return loss_total/total_graph, y_hat, y_true, acc_score, auc_score
+
             
     with open(log_file, 'a') as f:
         print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
