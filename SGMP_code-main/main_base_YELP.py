@@ -316,7 +316,14 @@ def main(data, args):
         if epoch % args.test_per_round == 0:
             valid_loss, yhat_valid, ytrue_valid = test(valid_loader, model, args)
             valid_score = measure(ytrue_valid, yhat_valid)
-
+            
+            # Check if the model is YELP_G
+            if args.model == 'YELP_G':
+                loss_function = nn.BCEWithLogitsLoss()
+                valid_loss += loss_function(yhat_valid, ytrue_valid)
+            
+            valid_score = measure(ytrue_valid, yhat_valid)
+            
             if epoch >= 100:
                 lr = scheduler.optimizer.param_groups[0]['lr']
                 scheduler.step(valid_loss)
