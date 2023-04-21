@@ -230,8 +230,14 @@ def main(data, args):
             else:                                             
                 out = model(x, pos, edge_index, batch)
                 
-            if task == 'classification':                                
-                loss = criterion(out, y.reshape(-1))  # Compute the loss.
+            if task == 'classification':
+                if args.dataset == 'YELP_G':
+                    loss = criterion(out, y.float())  # Compute the loss.
+                    y_pred = torch.sigmoid(out)
+                    y_true = y.float()
+                    score = roc_auc_score(y_true.detach().cpu().numpy(), y_pred.detach().cpu().numpy())
+                else:
+                    loss = criterion(out, y.reshape(-1))  # Compute the loss.
             else:
                 loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
             loss.backward()  # Derive gradients.
