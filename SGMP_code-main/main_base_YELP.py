@@ -128,8 +128,12 @@ def main(data, args):
         input_channels_node, hidden_channels, readout = 1, 64, args.readout
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
+    elif args.dataset == 'YELP_G' :
+        input_channels_node, hidden_channels, readout = 4, 64, args.readout
     else:
-        input_channels_node, hidden_channels, readout = 9, 64, args.readout   
+        input_channels_node, hidden_channels, readout = 9, 64, args.readout
+    
+        
     
     if args.dataset in [ 'BACE', 'BBBP']:
         task = 'classification'                  
