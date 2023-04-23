@@ -271,14 +271,14 @@ def main(data, args):
                 out = model(x, pos, edge_index, batch)
 
             if args.dataset == 'YELP_G':
-                criterion = torch.nn.BCEWithLogitsLoss()
+                
                 loss = criterion(out.squeeze(), y.float())
             else:
                 if task == 'classification':                                
-                    criterion = torch.nn.CrossEntropyLoss()
+                    
                     loss = criterion(out, y.reshape(-1))  # Compute the loss.
                 else:
-                    criterion = torch.nn.MSELoss()
+                    
                     loss = criterion(out.reshape(-1, 1), y.reshape(-1, 1))  # Compute the loss.
 
             loss_total += loss.detach().cpu() * data.num_graphs
@@ -287,10 +287,10 @@ def main(data, args):
             if task == 'classification':                                
                 pred = out.argmax(dim=1)  # Use the class with highest probability.
                 y_hat += list(pred.cpu().detach().numpy().reshape(-1))
-                y_true += list(y.cpu().detach().numpy().reshape(-1))
+                
             else:
                 y_hat += list(out.cpu().detach().numpy().reshape(-1))
-                y_true += list(y.cpu().detach().numpy().reshape(-1))
+            y_true += list(y.cpu().detach().numpy().reshape(-1))
 
         if args.dataset == 'YELP_G':
             y_hat = torch.relu(torch.tensor(y_hat)).numpy() # applico la relu ai logits
