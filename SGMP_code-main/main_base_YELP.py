@@ -305,34 +305,33 @@ def main(data, args):
         
             
     with open(log_file, 'a') as f:
-        print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
-
+        print("Epoch, Valid loss, Valid score, Time", file=f)
+        
     start_time = time.time()
-    best_valid_score = 1e10 if task == 'regression' else 0        
+    best_valid_score = 1e10 if task == 'regression' else 0
     best_model = None
-    for epoch in (range(1, args.epoch)):
-        # training
+    for epoch in range(1, args.epoch):
+    # training
         train(train_loader, model, args)
         
         if epoch % args.test_per_round == 0:
             valid_loss, yhat_valid, ytrue_valid = test(valid_loader, model, args)
-            valid_score = measure(ytrue_valid, yhat_valid)
             
             # Check if the model is YELP_G
             if args.model == 'YELP_G':
                 loss_function = nn.BCEWithLogitsLoss()
                 valid_loss += loss_function(yhat_valid, ytrue_valid)
-            
+
             valid_score = measure(ytrue_valid, yhat_valid)
             
             if epoch >= 100:
                 lr = scheduler.optimizer.param_groups[0]['lr']
                 scheduler.step(valid_loss)
-
+                
             with open(log_file, 'a') as f:
-                print(f"{epoch:03d}, {valid_loss:.4f}, {valid_score:.4f} ,{(time.time() - start_time):.4f}", file=f) 
+                print(f"{epoch:03d}, {valid_loss:.4f}, {valid_score:.4f}, {(time.time() - start_time):.4f}", file=f)
 
-            if task == 'regression':                           
+            if task == 'regression':
                 if valid_score < best_valid_score:
                     best_valid_score = valid_score
                     best_model = copy.deepcopy(model)
@@ -344,10 +343,11 @@ def main(data, args):
     train_loss, yhat_train, ytrue_train = test(train_loader, model, args)
     train_score = measure(ytrue_train, yhat_train)
     valid_loss, yhat_valid, ytrue_valid = test(valid_loader, model, args)
-    valid_score = measure(ytrue_valid, yhat_valid) 
+    valid_score = measure(ytrue_valid, yhat_valid)
     test_loss, yhat_test, ytrue_test = test(test_loader, model, args)
-    test_score = measure(ytrue_test, yhat_test)
-    
+    test_score = measure(ytrue_test, yhat_test)        
+                
+
     with open(result_file, 'a') as f:
         if task == 'regression':
             print(f"Final, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
