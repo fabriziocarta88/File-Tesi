@@ -296,12 +296,13 @@ def main(data, args):
             y_hat = torch.relu(torch.tensor(y_hat)).numpy() # applico la relu ai logits
             auc_score = roc_auc_score(y_true, y_hat)
             acc_score = None
+            return loss_total/total_graph, y_hat,auc_score
         else:
             acc_score = accuracy_score(y_true, y_hat)
             auc_score = None
+            return loss_total/total_graph, y_hat, y_true
 
-        return loss_total/total_graph, y_hat, y_true, acc_score, auc_score
-
+        
             
     with open(log_file, 'a') as f:
         print(f"Epoch, Valid loss, Valid score, --- %s seconds ---", file=f) 
