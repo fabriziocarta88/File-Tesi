@@ -58,9 +58,9 @@ def load_data(args):
           with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP_G.pkl.gz'), 'rb') as file:  
               dataset = pkl.load(file)
             
-              random_state = np.random.RandomState(seed=0)     # aggiunto
-              train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
-              valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
+          random_state = np.random.RandomState(seed=0)     # aggiunto
+          train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
+          valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
 
     elif args.dataset == 'QM9':
         from torch_geometric.datasets import QM9
