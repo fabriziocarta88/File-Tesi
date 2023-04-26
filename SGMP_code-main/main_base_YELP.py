@@ -23,7 +23,7 @@ def get_args():
     parser.add_argument('--data_dir', type=str, default='./data')
     parser.add_argument('--save_dir', type=str, default='./results')
     parser.add_argument('--model', type=str, default='SGMP')
-    parser.add_argument('--dataset', type=str, default='BACE')
+    parser.add_argument('--dataset', type=str, default='YELP')
     parser.add_argument('--split', type=str, default='811')
     parser.add_argument('--device', type=str, default='gpu')
     parser.add_argument('--readout', type=str, default='add')  # funzione di aggregazione all'output- > add, sum, mean
