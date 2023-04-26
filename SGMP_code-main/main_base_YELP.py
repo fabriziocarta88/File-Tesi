@@ -196,7 +196,7 @@ def main(data, args):
         from sklearn.metrics import mean_absolute_error
         measure = mean_absolute_error
     elif task == 'classification':
-        if args.dataset == 'YELP_G':
+        if args.dataset == 'YELP':
             criterion = torch.nn.BCEWithLogitsLoss()
             from sklearn.metrics import roc_auc_score
             measure = roc_auc_score
