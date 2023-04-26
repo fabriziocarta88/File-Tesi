@@ -307,7 +307,7 @@ def main(data, args):
         
             
     with open(log_file, 'a') as f:
-        print("Epoch, Valid loss, Valid score, Time", file=f)
+        print("Epoch, Valid loss, Valid score, --- %s seconds ---", file=f)
         
     start_time = time.time()
     best_valid_score = 1e10 if task == 'regression' else 0
