@@ -55,7 +55,7 @@ def load_data(args):
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
     
     elif args.dataset =='YELP':
-         with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP.pkl.gz'), 'rb') as file:  
+         with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP_G.pkl.gz'), 'rb') as file:  
                 dataset = pkl.load(file)
          dataset = [dataset[i] for i in torch.randperm(len(dataset))]   
          train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
@@ -128,7 +128,7 @@ def main(data, args):
         input_channels_node, hidden_channels, readout = 1, 64, args.readout
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
-    elif args.dataset == 'YELP' :
+    elif args.dataset == 'YELP_G' :
         input_channels_node, hidden_channels, readout = 4, 64, args.readout
     else:
         input_channels_node, hidden_channels, readout = 9, 64, args.readout
@@ -196,7 +196,7 @@ def main(data, args):
         from sklearn.metrics import mean_absolute_error
         measure = mean_absolute_error
     elif task == 'classification':
-        if args.dataset == 'YELP':
+        if args.dataset == 'YELP_G':
             criterion = torch.nn.BCEWithLogitsLoss()
             from sklearn.metrics import roc_auc_score
             measure = roc_auc_score
@@ -231,7 +231,7 @@ def main(data, args):
                 out = model(x, pos, edge_index, batch)
                 
             if task == 'classification':
-                if args.dataset == 'YELP':
+                if args.dataset == 'YELP_G':
                     loss = criterion(out, y.float())  # Compute the loss.
                     y_pred = torch.relu(out)
                     y_true = y.float()
@@ -270,7 +270,7 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
 
-            if args.dataset == 'YELP':
+            if args.dataset == 'YELP_G':
                 
                 loss = criterion(out.squeeze(), y.float())
             else:
@@ -292,7 +292,7 @@ def main(data, args):
                 y_hat += list(out.cpu().detach().numpy().reshape(-1))
             y_true += list(y.cpu().detach().numpy().reshape(-1))
 
-        if args.dataset == 'YELP':
+        if args.dataset == 'YELP_G':
             y_hat = torch.relu(torch.tensor(y_hat)).numpy() # applico la relu ai logits
             auc_score = roc_auc_score(y_true, y_hat)
             acc_score = None
@@ -318,7 +318,7 @@ def main(data, args):
             valid_loss, yhat_valid, ytrue_valid = test(valid_loader, model, args)
             
             # Check if the model is YELP
-            if args.model == 'YELP':
+            if args.model == 'YELP_G':
                 loss_function = nn.BCEWithLogitsLoss()
                 valid_loss += loss_function(yhat_valid, ytrue_valid)
 
@@ -352,7 +352,7 @@ def main(data, args):
         if task == 'regression':
             print(f"Final, Train RMSE: {np.sqrt(train_loss):.4f}, Train MAE: {train_score:.4f}, Valid RMSE: {np.sqrt(valid_loss):.4f}, Valid MAE: {valid_score:.4f}, Test RMSE: {np.sqrt(test_loss):.4f}, Test MAE: {test_score:.4f}", file=f)
         elif task == 'classification':
-            if args.model == 'YELP':
+            if args.model == 'YELP_G':
                 print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
                 
             else:
@@ -366,7 +366,7 @@ def main(data, args):
     test_score = measure(ytrue_test, yhat_test)
     
     with open(result_file, 'a') as f:
-        if args.model == 'YELP':
+        if args.model == 'YELP_G':
             binary_loss, binary_acc = binary_cross_entropy_loss(yhat_test, ytrue_test)
             
             print(f"Best Model, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}, Binary cross entropy loss: {binary_loss:.4f}", file=f)
