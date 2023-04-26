@@ -359,12 +359,13 @@ def main(data, args):
             else:
                 print(f"Final, Train loss: {train_loss:.4f}, Train acc: {train_score:.4f}, Valid loss: {valid_loss:.4f}, Valid acc: {valid_score:.4f}, Test loss: {test_loss:.4f}, Test acc: {test_score:.4f}", file=f)
 
-        train_loss, yhat_train, ytrue_train = test(train_loader, best_model, args)
-        train_score = measure(ytrue_train, yhat_train)
-        valid_loss, yhat_valid, ytrue_valid = test(valid_loader, best_model, args)
-        valid_score = measure(ytrue_valid, yhat_valid)
-        test_loss, yhat_test, ytrue_test = test(test_loader, best_model, args)
-        test_score = measure(ytrue_test, yhat_test)
+    train_loss, yhat_train, ytrue_train = test(train_loader, best_model, args)
+    train_score = measure(ytrue_train, yhat_train)
+    valid_loss, yhat_valid, ytrue_valid = test(valid_loader, best_model, args)
+    valid_score = measure(ytrue_valid, yhat_valid)
+    test_loss, yhat_test, ytrue_test = test(test_loader, best_model, args)
+    test_score = measure(ytrue_test, yhat_test)
+        
         if args.model == 'YELP_G':
             binary_loss, binary_acc = binary_cross_entropy_loss(yhat_test, ytrue_test)
             with open(result_file, 'a') as f:
