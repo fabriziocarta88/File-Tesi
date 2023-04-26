@@ -57,12 +57,10 @@ def load_data(args):
     elif args.dataset =='YELP' :
           with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP.pkl.gz'), 'rb') as file:  
               dataset = pkl.load(file)
-            
-         
-          
-            
-          train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
-          valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
+         dataset = [dataset[i] for i in torch.randperm(len(dataset))]   
+         train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
+         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
+   
 
     elif args.dataset == 'QM9':
         from torch_geometric.datasets import QM9
@@ -130,7 +128,7 @@ def main(data, args):
         input_channels_node, hidden_channels, readout = 1, 64, args.readout
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
-    elif args.dataset == 'YELP_G' :
+    elif args.dataset == 'YELP' :
         input_channels_node, hidden_channels, readout = 4, 64, args.readout
     else:
         input_channels_node, hidden_channels, readout = 9, 64, args.readout
@@ -233,7 +231,7 @@ def main(data, args):
                 out = model(x, pos, edge_index, batch)
                 
             if task == 'classification':
-                if args.dataset == 'YELP_G':
+                if args.dataset == 'YELP':
                     loss = criterion(out, y.float())  # Compute the loss.
                     y_pred = torch.relu(out)
                     y_true = y.float()
@@ -272,7 +270,7 @@ def main(data, args):
             else:
                 out = model(x, pos, edge_index, batch)
 
-            if args.dataset == 'YELP_G':
+            if args.dataset == 'YELP':
                 
                 loss = criterion(out.squeeze(), y.float())
             else:
@@ -294,7 +292,7 @@ def main(data, args):
                 y_hat += list(out.cpu().detach().numpy().reshape(-1))
             y_true += list(y.cpu().detach().numpy().reshape(-1))
 
-        if args.dataset == 'YELP_G':
+        if args.dataset == 'YELP':
             y_hat = torch.relu(torch.tensor(y_hat)).numpy() # applico la relu ai logits
             auc_score = roc_auc_score(y_true, y_hat)
             acc_score = None
