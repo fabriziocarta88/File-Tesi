@@ -22,7 +22,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', type=str, default='./data')
     parser.add_argument('--save_dir', type=str, default='./results')
-    parser.add_argument('--model', type=str, default='SGMP')
+    parser.add_argument('--model', type=str, default='SGMP_Y')
     parser.add_argument('--dataset', type=str, default='YELP')
     parser.add_argument('--split', type=str, default='811')
     parser.add_argument('--device', type=str, default='gpu')
@@ -180,7 +180,7 @@ def main(data, args):
         net = Dimenet(input_channels_node=input_channels_node, 
                     hidden_channels=hidden_channels, output_channels=output_channels, num_blocks=args.num_layers,
                     cutoff=args.cutoff)
-    elif args.model == 'SGMP':
+    elif args.model == 'SGMP_Y':
         from models.SGMP import SGMP
         net = SGMP(input_channels_node=input_channels_node, 
             hidden_channels=hidden_channels, output_channels=output_channels,
@@ -223,7 +223,7 @@ def main(data, args):
             if args.spanning_tree == 'True':
                 edge_index = build_spanning_tree_edge(edge_index.cpu(), algo='scipy', num_nodes=num_nodes, num_edges=num_edges)  # posso scegliere tipo st:
             x, pos, edge_index, batch, y = x.to(device), pos.to(device), edge_index.to(device), batch.to(device), y.to(device)   # 'scipy' o 'union'=random
-            if args.model == 'SGMP':
+            if args.model == 'SGMP_Y':
                 edge_index, _ = add_self_loops(edge_index, num_nodes=num_nodes) # add self loop to avoid crash on specific data point with longest path < 3
                 _, _, edge_index_3rd, _, _, _, _, _ = find_higher_order_neighbors(edge_index, num_nodes, order=3)
                 out = model(x, pos, batch, edge_index_3rd)
@@ -263,7 +263,7 @@ def main(data, args):
             if args.spanning_tree == 'True':
                 edge_index = build_spanning_tree_edge(edge_index.cpu(), algo='scipy', num_nodes=num_nodes, num_edges=num_edges)
             x, pos, edge_index, batch, y = x.to(device), pos.to(device), edge_index.to(device), batch.to(device), y.to(device)
-            if args.model == 'SGMP':
+            if args.model == 'SGMP_Y':
                 edge_index, _ = add_self_loops(edge_index, num_nodes=num_nodes, fill_value=-1.)
                 _, _, edge_index_3rd, _, _, _, _, _ = find_higher_order_neighbors(edge_index, num_nodes, order=3)
                 out = model(x, pos, batch, edge_index_3rd)
