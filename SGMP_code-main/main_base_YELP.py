@@ -181,7 +181,7 @@ def main(data, args):
                     hidden_channels=hidden_channels, output_channels=output_channels, num_blocks=args.num_layers,
                     cutoff=args.cutoff)
     elif args.model == 'SGMP_Y':
-        from models.SGMP import SGMP
+        from models.SGMP_Y import SGMP
         net = SGMP(input_channels_node=input_channels_node, 
             hidden_channels=hidden_channels, output_channels=output_channels,
             num_interactions=args.num_layers, cutoff=args.cutoff,
