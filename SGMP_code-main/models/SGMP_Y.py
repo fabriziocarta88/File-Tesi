@@ -77,7 +77,7 @@ class SGMP(torch.nn.Module):
         phis = {}
         i, j, k, p = edge_index_3rd
         if pos[j][3] == pos[i][3]:
-	  	i_to_j_dis = float("inf")
+	    i_to_j_dis = float("inf")
 	else:
 	    i_to_j_dis = (pos[j] - pos[i]).norm(p=2, dim=1)
         if pos[j][3] == pos[k][3]:
