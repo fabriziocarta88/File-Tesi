@@ -78,17 +78,18 @@ class SGMP(torch.nn.Module):
         i, j, k, p = edge_index_3rd
         if pos[j][3] == pos[i][3]:
 	  	i_to_j_dis = float("inf")
-	  else:
-		i_to_j_dis = (pos[j] - pos[i]).norm(p=2, dim=1)
+	else:
+	    i_to_j_dis = (pos[j] - pos[i]).norm(p=2, dim=1)
         if pos[j][3] == pos[k][3]:
-	  	k_to_j_dis = float("inf")
-	  else:  
-		k_to_j_dis = (pos[k] - pos[j]).norm(p=2, dim=1)
-	  if pos[j][3] == pos[p][3]:
-	  	p_to_j_dis = float("inf")
-	  else:
-		p_to_j_dis = (pos[p] - pos[j]).norm(p=2, dim=1)
-        distances[1] = i_to_j_dis                        
+	    k_to_j_dis = float("inf")
+	else:  
+	    k_to_j_dis = (pos[k] - pos[j]).norm(p=2, dim=1)
+	if pos[j][3] == pos[p][3]:
+	    p_to_j_dis = float("inf")
+	else:
+	    p_to_j_dis = (pos[p] - pos[j]).norm(p=2, dim=1)
+        
+	distances[1] = i_to_j_dis                        
         distances[2] = k_to_j_dis
         distances[3] = p_to_j_dis
         theta_ijk = get_angle(pos[j] - pos[i], pos[k] - pos[j])
