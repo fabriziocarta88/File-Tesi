@@ -55,7 +55,7 @@ def load_data(args):
         valid_test_split = int( int(args.split[1]) / 10 * len(dataset) )
     
     elif args.dataset =='YELP':
-         with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP_G.pkl.gz'), 'rb') as file:  
+         with gzip.open(os.path.join(args.data_dir, 'YELP', 'YELP_b.pkl.gz'), 'rb') as file:  
                 dataset = pkl.load(file)
          dataset = [dataset[i] for i in torch.randperm(len(dataset))]   
          train_valid_split = int( int(args.split[0]) / 10 * len(dataset) )
