@@ -129,7 +129,7 @@ def main(data, args):
     elif args.dataset == 'QM9':
         input_channels_node, hidden_channels, readout = 11, 64, args.readout
     elif args.dataset == 'YELP' :
-        input_channels_node, hidden_channels, readout = 4, 64, args.readout
+        input_channels_node, hidden_channels, readout = 957, 64, args.readout
     else:
         input_channels_node, hidden_channels, readout = 9, 64, args.readout
     
