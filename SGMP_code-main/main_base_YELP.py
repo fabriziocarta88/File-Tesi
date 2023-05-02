@@ -145,7 +145,7 @@ def main(data, args):
     if task == 'regression':
       if args.dataset == 'synthetic':                     # cambiato il codice-> aggiunto 4 ciclo annodato if/elif
           output_channels = 4
-      elif args.dataset in ['QM9', 'ESOL', 'Lipo', 'brain']:
+      elif args.dataset in ['QM9', 'ESOL', 'Lipo', 'brain','YELP']:
           output_channels = 1   # default 1
     else:
         output_channels = 2
