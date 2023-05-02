@@ -79,7 +79,7 @@ class SGMP(torch.nn.Module):
 	distances = {}
         thetas = {}
         phis = {}
-        i, j, k, p = edge_index_3rd
+        i, j, k, p = edge_index_filtered 
         i_to_j_dis = (pos[j] - pos[i]).norm(p=2, dim=1)
         k_to_j_dis = (pos[k] - pos[j]).norm(p=2, dim=1)
         p_to_j_dis = (pos[p] - pos[j]).norm(p=2, dim=1)
