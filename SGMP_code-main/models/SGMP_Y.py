@@ -70,7 +70,13 @@ class SGMP(torch.nn.Module):
     def forward(self, x, pos, batch, edge_index_3rd=None):  
         x = self.embedding(x)
         
-        distances = {}
+	# Filter edge_index_3rd to include only edges between nodes of different types
+        node_types = pos[:, 2]
+        edge_mask = node_types[edge_index_3rd[0]] != node_types[edge_index_3rd[1]]
+        edge_index_filtered = edge_index_3rd[:, edge_mask]
+        
+	
+	distances = {}
         thetas = {}
         phis = {}
         i, j, k, p = edge_index_3rd
